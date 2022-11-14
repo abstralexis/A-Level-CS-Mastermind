@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>
+            Alexis' Mastermind
+        </title>
+
+        <script src="scripts.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+
+    <body>
+        <div align="center">
+            <h1>Mastermind</h1>
+
+            <canvas id="gameCanvas" width="480" height="480"></canvas>
+
+            <button onclick="var canvas = document.getElementById('gameCanvas');
+                             var ctx = canvas.getContext('2d');
+                             drawSquare(canvas, ctx, 10, 10, 'red');">Place!</button>
+            <button onclick="var canvas = document.getElementById('gameCanvas');
+                             var ctx = canvas.getContext('2d');
+                             drawSquare(canvas, ctx, 50, 50, 'blue');">Place again!</button>
+        </div>
+    </body>
+</html>
