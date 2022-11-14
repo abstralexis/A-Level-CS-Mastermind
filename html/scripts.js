@@ -3,19 +3,45 @@ window.onload = function() {
     main();
 }
 
-function main() {
-    var canvas = document.getElementById("gameCanvas"); // Canvas object
-    var ctx = canvas.getContext("2d");                  // Image rendering context
+function canvasInit() {
+    /*
+    Initialise the canvas
+    Returns a list of [canvas, ctx] where
+    ctx is the canvas context.
+    */
+    var canvas = document.getElementById("gameCanvas");
+    var ctx = canvas.getContext("2d");
+    return [canvas, ctx];
+}
 
-    draw(canvas, ctx);
+function main() {
+
+    var board = [
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null]
+    ]
+
+    draw();
     setInterval(draw, 10);
 }
 
-function draw(canvas, ctx) {
-    fillCanvas(canvas, ctx);
+function draw() {
+    // Init canvas
+    var [canvas, ctx] = canvasInit();
+
+    fillCanvas();
 }
 
-function fillCanvas(canvas, ctx) {
+function fillCanvas() {
+    // Init canvas
+    var [canvas, ctx] = canvasInit();
+
     var w = canvas.width;
     var h = canvas.height;
 
@@ -28,7 +54,18 @@ function fillCanvas(canvas, ctx) {
     ctx.fillRect(0, 0, w, h); 
 }
 
-function drawSquare(canvas, ctx, x, y, colour) {
+function drawSquare(x, y, colour) {
+    // Init canvas
+    var [canvas, ctx] = canvasInit();
+
     ctx.fillStyle = colour;
     ctx.fillRect(x, y, 50, 50);
+}
+
+function tmpDrawRed() {
+    drawSquare(10, 10, 'red');
+}
+
+function tmpDrawBlue() {
+    drawSquare(50, 50, 'blue');
 }

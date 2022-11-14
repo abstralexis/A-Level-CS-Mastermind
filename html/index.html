@@ -15,12 +15,11 @@
 
             <canvas id="gameCanvas" width="480" height="480"></canvas>
 
-            <button onclick="var canvas = document.getElementById('gameCanvas');
-                             var ctx = canvas.getContext('2d');
-                             drawSquare(canvas, ctx, 10, 10, 'red');">Place!</button>
-            <button onclick="var canvas = document.getElementById('gameCanvas');
-                             var ctx = canvas.getContext('2d');
-                             drawSquare(canvas, ctx, 50, 50, 'blue');">Place again!</button>
+            <button onclick="tmpDrawRed()">Place!</button>
+            <button onclick="tmpDrawBlue()">Place again!</button>
+
+            <button onclick="fillCanvas()">Clear</button>
+
         </div>
     </body>
 </html>
