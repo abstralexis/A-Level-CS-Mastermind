@@ -32,6 +32,12 @@ FG = cc.EARTH_GREEN.rgb
 # Consts
 SIZE = 20   # The size in px of each block
 
+# Fonts
+pygame.font.init()
+TITLE = pygame.font.SysFont("serif", 24)
+OPTION = pygame.font.SysFont("serif", 16)
+TEXT = pygame.font.SysFont("serif", 8)
+
 # --- Other classes --
 
 # Block patterns
@@ -106,6 +112,28 @@ class BoxRenderer:
     def little_dot(self, x, y, w, h):
         self.little_fill(x, y, w, h, 3)
 
+    def _single_dot(self, x, y, col):
+        pygame.draw.line(self.screen, col, (x, y), (x, y))
+
+    def background(self, x, y, w, h, col1, col2):
+        """
+        Was going to be a gradient but ended up being something
+        quite cool. Not sure how that happened.
+        """
+        bgrect = pygame.rect.Rect(x, y, w, h)
+        pygame.draw.rect(self.screen, col1, bgrect)
+
+        for row in range(h):
+            n = h - (h - row)
+            for i in range(n):
+                l = ((w)/(n))
+                pygame.draw.line(
+                    self.screen,
+                    col2,
+                    ((i*l), row),
+                    ((i*l) + l - 1.3, row)
+                )
+
 
 br = BoxRenderer(WIN)
 
@@ -124,6 +152,7 @@ class Mastermind:
         self.main()
 
     def main(self):
+        state = "menu"
         running = True
         clock = pygame.time.Clock()
         while running:
@@ -134,15 +163,37 @@ class Mastermind:
                     sys.exit()
 
             WIN.fill(BG)
-            self.draw_board()
-
-            br.little_fill(80, 0, SIZE, SIZE, 10)
-            br.little_border(100, 0, SIZE, SIZE, 10)
-            br.little_border(120, 0, SIZE, SIZE, 10)
-            br.little_dot(140, 0, SIZE, SIZE)
+            
+            if state == "menu":
+                self.draw_menu()
+            elif state == "game":
+                self.draw_game()
 
             pygame.display.flip()
             clock.tick(60)
+
+    def draw_menu(self):
+        br.background(0, 0, WIDTH, HEIGHT, FG, BG)
+        title = TITLE.render("MASTERMIND", False, FG, BG)
+        play = OPTION.render("Play", False, FG, BG)
+        leaderboard = OPTION.render("Leaderboard", False, FG, BG)
+        controls = OPTION.render("Controls", False, FG, BG)
+        exit = OPTION.render("Exit", False, FG, BG)
+        
+        WIN.blit(title, (0, 0))
+        br.blank(30, 30, 97, 100)
+        WIN.blit(play, (40, 40))
+        WIN.blit(leaderboard, (40, 60))
+        WIN.blit(controls, (40, 80))
+        WIN.blit(exit, (40, 100))
+
+    def draw_game(self):
+        self.draw_board()
+        br.little_fill(80, 0, SIZE, SIZE, 10)
+        br.little_border(100, 0, SIZE, SIZE, 10)
+        br.little_border(120, 0, SIZE, SIZE, 10)
+        br.little_dot(140, 0, SIZE, SIZE)
+
 
     def draw_board(self):
         """
