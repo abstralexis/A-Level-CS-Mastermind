@@ -87,14 +87,34 @@ class BoxRenderer:
                 (x + w, y + (i * 2))
             )
 
+    def little_border(self, x, y, w, h, size):
+        tlx = x + ((w - size) // 2)      # Top left offsets
+        tly = y + ((h - size) // 2)
+        pygame.draw.line(self.screen, FG, (tlx, tly), (tlx + size, tly))
+        pygame.draw.line(self.screen, FG, (tlx + size, tly), (tlx + size, tly + size))
+        pygame.draw.line(self.screen, FG, (tlx + size, tly + size), (tlx, tly + size))
+        pygame.draw.line(self.screen, FG, (tlx, tly + size), (tlx, tly))
+
+    def little_fill(self, x, y, w, h, size):
+        self.little_border(x, y, w, h, size)
+
+        tlx = x + ((w - size) // 2)      # Top left offsets
+        tly = y + ((h - size) // 2)
+        rect = pygame.rect.Rect(tlx, tly, size, size)
+        pygame.draw.rect(self.screen, FG, rect)
+
+    def little_dot(self, x, y, w, h):
+        self.little_fill(x, y, w, h, 3)
+
+
 br = BoxRenderer(WIN)
 
 # --- Main game class ---
 class Mastermind:
     def __init__(self):
         self.board = [
-            [Patterns.blank, Patterns.horizontal, None, None],
-            [Patterns.vertical, Patterns.fill, None, None],
+            [Patterns.blank, Patterns.horizontal, Patterns.vertical, Patterns.fill],
+            [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
@@ -115,6 +135,12 @@ class Mastermind:
 
             WIN.fill(BG)
             self.draw_board()
+
+            br.little_fill(80, 0, SIZE, SIZE, 10)
+            br.little_border(100, 0, SIZE, SIZE, 10)
+            br.little_border(120, 0, SIZE, SIZE, 10)
+            br.little_dot(140, 0, SIZE, SIZE)
+
             pygame.display.flip()
             clock.tick(60)
 
