@@ -29,6 +29,9 @@ else:
 BG = cc.BLACK.rgb
 FG = cc.EARTH_GREEN.rgb
 
+# Consts
+SIZE = 20   # The size in px of each block
+
 # --- Other classes --
 
 # Block patterns
@@ -57,6 +60,7 @@ class BoxRenderer:
     def blank(self, x, y, w, h):
         rect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, BG, rect)
+        self.fgborder(x, y, w, h)
 
     def fill(self, x, y, w, h):
         self.fgborder(x, y, w, h)
@@ -83,13 +87,14 @@ class BoxRenderer:
                 (x + w, y + (i * 2))
             )
 
+br = BoxRenderer(WIN)
 
 # --- Main game class ---
 class Mastermind:
     def __init__(self):
         self.board = [
-            [None, None, None, None],
-            [None, None, None, None],
+            [Patterns.blank, Patterns.horizontal, None, None],
+            [Patterns.vertical, Patterns.fill, None, None],
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
@@ -99,7 +104,6 @@ class Mastermind:
         self.main()
 
     def main(self):
-        br = BoxRenderer(WIN)
         running = True
         clock = pygame.time.Clock()
         while running:
@@ -110,12 +114,29 @@ class Mastermind:
                     sys.exit()
 
             WIN.fill(BG)
-            br.fgborder(0, 0, 20, 20)
-            br.vertical(20, 0, 20, 20)
-            br.horizontal(0, 20, 20, 20)
-            br.fill(20, 20, 20, 20)
+            self.draw_board()
             pygame.display.flip()
             clock.tick(60)
+
+    def draw_board(self):
+        """
+        Draws the board to the screen by calling the BoxRenderer
+        based off of what values are stored in the board list.
+        """
+        for i, row in enumerate(self.board):
+            y = i * 20
+            for j, column in enumerate(row):
+                x = j * 20
+                match column:
+                    case Patterns.blank:
+                        br.blank(x, y, SIZE, SIZE)
+                    case Patterns.fill:
+                        br.fill(x, y, SIZE, SIZE)
+                    case Patterns.horizontal:
+                        br.horizontal(x, y, SIZE, SIZE)
+                    case Patterns.vertical:
+                        br.vertical(x, y, SIZE, SIZE)
+
 
 # --- Main ---
 if __name__ == "__main__":
