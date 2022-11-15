@@ -149,6 +149,8 @@ class Mastermind:
             [None, None, None, None]
         ]
 
+        self.option = 0
+
         self.main()
 
     def main(self):
@@ -162,6 +164,16 @@ class Mastermind:
                     pygame.quit()
                     sys.exit()
 
+            keys = pygame.key.get_pressed()
+                # Scroll the menu
+            if state == "menu":
+                if keys[pygame.K_UP]:
+                    if self.option > 0:
+                        self.option -= 1
+                if keys[pygame.K_DOWN]:
+                    if self.option < 3:
+                        self.option += 1
+
             WIN.fill(BG)
             
             if state == "menu":
@@ -170,16 +182,33 @@ class Mastermind:
                 self.draw_game()
 
             pygame.display.flip()
-            clock.tick(60)
+            clock.tick(12)
 
     def draw_menu(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
-        title = TITLE.render("MASTERMIND", False, FG, BG)
-        play = OPTION.render("Play", False, FG, BG)
-        leaderboard = OPTION.render("Leaderboard", False, FG, BG)
-        controls = OPTION.render("Controls", False, FG, BG)
-        exit = OPTION.render("Exit", False, FG, BG)
-        
+
+        titletxt = "MASTERMIND"
+        playtxt = "Play"
+        ldrbrdtxt = "Leaderboard"
+        ctrltxt = "Controls"
+        exittxt = "Exit"
+
+        match self.option:
+            case 0:
+                playtxt = "> " + playtxt
+            case 1:
+                ldrbrdtxt = "> " + ldrbrdtxt
+            case 2:
+                ctrltxt = "> " + ctrltxt
+            case 3:
+                exittxt = "> " + exittxt    
+
+        title = TITLE.render(titletxt, False, FG, BG)
+        play = OPTION.render(playtxt, False, FG, BG)
+        leaderboard = OPTION.render(ldrbrdtxt, False, FG, BG)
+        controls = OPTION.render(ctrltxt, False, FG, BG)
+        exit = OPTION.render(exittxt, False, FG, BG)
+
         WIN.blit(title, (0, 0))
         br.blank(30, 30, 97, 100)
         WIN.blit(play, (40, 40))
