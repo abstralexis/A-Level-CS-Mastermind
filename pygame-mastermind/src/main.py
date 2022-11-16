@@ -173,6 +173,18 @@ class Mastermind:
                 if keys[pygame.K_DOWN]:
                     if self.option < 3:
                         self.option += 1
+                if keys[pygame.K_RETURN]:
+                    if self.option == 0:
+                        state = "game"
+                    elif self.option == 2:
+                        state = "controls"
+                    elif self.option == 3:
+                        running = False
+                        pygame.quit()
+                        sys.exit()
+            elif state != "menu":
+                if keys[pygame.K_ESCAPE]:
+                    state = "menu"
 
             WIN.fill(BG)
             
@@ -180,6 +192,8 @@ class Mastermind:
                 self.draw_menu()
             elif state == "game":
                 self.draw_game()
+            elif state == "controls":
+                self.draw_controls()
 
             pygame.display.flip()
             clock.tick(12)
@@ -242,6 +256,22 @@ class Mastermind:
                         br.horizontal(x, y, SIZE, SIZE)
                     case Patterns.vertical:
                         br.vertical(x, y, SIZE, SIZE)
+
+    def draw_controls(self):
+        br.background(0, 0, WIDTH, HEIGHT, FG, BG)
+        br.blank(5, (HEIGHT//3), WIDTH - 10, HEIGHT - 30 - (HEIGHT//3))
+        titletxt = "OPTIONS"
+        title = TITLE.render(titletxt, False, FG)
+        WIN.blit(title, (30, 7))
+        optiontxt =  [
+            "ESC | Go back",
+            "<- -> | Change box",
+            "Z | Cycle box type",
+            "ENTER | Enter row"
+        ]
+        for height, item in enumerate(optiontxt):
+            line = OPTION.render(item, False, FG)
+            WIN.blit(line, (10, (15*height)+(HEIGHT//3)))
 
 
 # --- Main ---
