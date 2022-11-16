@@ -260,9 +260,9 @@ class Mastermind:
     def draw_controls(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
         br.blank(5, (HEIGHT//3), WIDTH - 10, HEIGHT - 30 - (HEIGHT//3))
-        titletxt = "OPTIONS"
+        titletxt = "CONTROLS"
         title = TITLE.render(titletxt, False, FG)
-        WIN.blit(title, (30, 7))
+        WIN.blit(title, (17, 7))
         optiontxt =  [
             "ESC | Go back",
             "<- -> | Change box",
