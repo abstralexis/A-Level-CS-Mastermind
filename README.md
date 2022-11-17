@@ -12,3 +12,7 @@ First, I tried doing small little graphical demos and such with HTML, CSS, and J
 ## Rust w/ Bevy Attempt
 
 I tried to start some stuff with Bevy, a rust library for making small graphical games. Bevy itself refused to compile, so I could not go further with it. I also find the way it structures programs to be very confusing.
+
+## Python w/ Pygame Attempt
+
+I decided to just fall back onto Pygame as my programming option. Doing a bit each day, it did not take long to get a fairly good looking version of Mastermind working. I am really proud of this game. One issue at the moment is the code is somewhat all over the place and uncommented, so I need to clean it up at some point. In addition, because of the way Pygame handles inputs per frame, I had to set the framerate really low. That doesn't matter at all for user experience except for the fact that some inputs are dropped in exchange for inputs that do not repeat if the framerate is too high.
