@@ -75,6 +75,8 @@ class BoxRenderer:
         pygame.draw.rect(self.screen, FG, rect)
 
     def vertical(self, x, y, w, h):
+        rect = pygame.rect.Rect(x, y, w, h)
+        pygame.draw.rect(self.screen, BG, rect)
         self.fgborder(x, y, w, h)
         for i in range(w//2):
             pygame.draw.line(
@@ -85,6 +87,8 @@ class BoxRenderer:
             )
 
     def horizontal(self, x, y, w, h):
+        rect = pygame.rect.Rect(x, y, w, h)
+        pygame.draw.rect(self.screen, BG, rect)
         self.fgborder(x, y, w, h)
         for i in range(h//2):
             pygame.draw.line(
@@ -97,6 +101,8 @@ class BoxRenderer:
     def little_border(self, x, y, w, h, size):
         tlx = x + ((w - size) // 2)      # Top left offsets
         tly = y + ((h - size) // 2)
+        rect = pygame.rect.Rect(tlx, tly, size, size)
+        pygame.draw.rect(WIN, BG, rect)
         pygame.draw.line(self.screen, FG, (tlx, tly), (tlx + size, tly))
         pygame.draw.line(self.screen, FG, (tlx + size, tly), (tlx + size, tly + size))
         pygame.draw.line(self.screen, FG, (tlx + size, tly + size), (tlx, tly + size))
@@ -172,6 +178,7 @@ class Mastermind:
                     self.pattern.append(Patterns.horizontal)
                 case 3:
                     self.pattern.append(Patterns.fill)
+        print(self.pattern)
 
         self.current_row = 0
         self.current_col = 0
@@ -179,6 +186,10 @@ class Mastermind:
         self.option = 0
 
         self.scores = []
+
+        self.game_ended = False
+
+        self.won = False
 
         self.main()
 
@@ -194,6 +205,10 @@ class Mastermind:
             else:
                 dots.append("dot")
         
+        if fills == ["fill", "fill", "fill", "fill"]:
+            self.game_ended = True
+            self.won = True
+
         score = [] + fills + blanks + dots
         self.scores.append(score)
         
@@ -261,6 +276,10 @@ class Mastermind:
 
                         self.scores = []
 
+                        self.game_ended = False
+
+                        self.won = False
+
                     state = "menu"
             
             if state == "game":
@@ -285,6 +304,7 @@ class Mastermind:
                     elif self.current_row == 5:
                         self.current_row += 1
                         self.board[self.current_row] = [None, None, None, None]
+                        self.game_ended = True
                 if keys[pygame.K_z]:
                     match self.board[self.current_row][self.current_col]:
                         case Patterns.blank:
@@ -344,6 +364,7 @@ class Mastermind:
         WIN.blit(exit, (40, 100))
 
     def draw_game(self):
+        br.background(0, 0, WIDTH, HEIGHT, FG, BG)
         self.draw_board()
 
     def draw_board(self):
@@ -379,6 +400,30 @@ class Mastermind:
                             br.little_border(x, y, SIZE, SIZE, 10)
                         case "dot":
                             br.little_dot(x, y, SIZE, SIZE)
+
+        if self.game_ended == True:
+            y = 120
+            for j, column in enumerate(self.pattern):
+                x = j * 20
+                match column:
+                    case Patterns.blank:
+                        br.blank(x, y, SIZE, SIZE)
+                    case Patterns.fill:
+                        br.fill(x, y, SIZE, SIZE)
+                    case Patterns.horizontal:
+                        br.horizontal(x, y, SIZE, SIZE)
+                    case Patterns.vertical:
+                        br.vertical(x, y, SIZE, SIZE)
+                    case Patterns.uparrow:
+                        br.arrow(x, y, FG)
+
+            if self.won:
+                msg = TITLE.render("WIN", False, FG, BG)  
+                WIN.blit(msg, (95, 117)) 
+            else:
+                msg = TITLE.render("LOSE", False, FG, BG)  
+                WIN.blit(msg, (90, 117)) 
+
 
     def draw_controls(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
