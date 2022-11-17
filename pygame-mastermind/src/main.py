@@ -151,14 +151,18 @@ br = BoxRenderer(WIN)
 class Mastermind:
     def __init__(self):
         self.board = [
-            [Patterns.blank, Patterns.horizontal, Patterns.vertical, Patterns.fill],
+            [Patterns.blank, Patterns.blank, Patterns.blank, Patterns.blank],
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
-            [None, None, None, Patterns.horizontal],
+            [None, None, None, None],
             [None, None, None, None]    # Buffer row for arrow
         ]
+
+        self.pattern = []
+        for i in range(4):
+            self.pattern.append(Patterns(random.randint(0, 3)))
 
         self.current_row = 0
         self.current_col = 0
@@ -202,6 +206,20 @@ class Mastermind:
             
             if state != "menu":
                 if keys[pygame.K_ESCAPE]:
+                    if state == "game":     # Reset vars on esc
+                        self.board = [
+                            [Patterns.blank, Patterns.blank, Patterns.blank, Patterns.blank],
+                            [None, None, None, None],
+                            [None, None, None, None],
+                            [None, None, None, None],
+                            [None, None, None, None],
+                            [None, None, None, None],
+                            [None, None, None, None]    # Buffer row for arrow
+                        ]
+                        self.current_col = 0
+                        self.current_row = 0
+
+
                     state = "menu"
             
             if state == "game":
