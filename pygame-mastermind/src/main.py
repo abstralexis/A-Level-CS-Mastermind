@@ -156,7 +156,8 @@ class Mastermind:
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
-            [None, None, None, Patterns.horizontal]
+            [None, None, None, Patterns.horizontal],
+            [None, None, None, None]    # Buffer row for arrow
         ]
 
         self.current_row = 0
@@ -177,7 +178,8 @@ class Mastermind:
                     pygame.quit()
                     sys.exit()
 
-            self.board[self.current_row + 1][self.current_col] = None
+            if self.current_row < 6:
+                self.board[self.current_row + 1][self.current_col] = None
 
             keys = pygame.key.get_pressed()
                 # Scroll the menu
@@ -188,7 +190,7 @@ class Mastermind:
                 if keys[pygame.K_DOWN]:
                     if self.option < 3:
                         self.option += 1
-                if keys[pygame.K_RETURN]:
+                if keys[pygame.K_z]:
                     if self.option == 0:
                         state = "game"
                     elif self.option == 2:
@@ -206,24 +208,47 @@ class Mastermind:
                 if keys[pygame.K_LEFT]:
                     if self.current_col > 0:
                         self.current_col -= 1
-                        print(self.current_col)
                 if keys[pygame.K_RIGHT]:
                     if self.current_col < 3:
-                        print(self.current_col)
                         self.current_col += 1
+                if keys[pygame.K_RETURN]:
+                    if self.current_row < 5:
+                        self.current_row += 1
+                        self.current_col = 0
+                        self.board[self.current_row] = [
+                            Patterns.blank, 
+                            Patterns.blank, 
+                            Patterns.blank, 
+                            Patterns.blank
+                        ]
+                    elif self.current_row == 5:
+                        self.current_row += 1
+                        self.board[self.current_row] = [None, None, None, None]
+                if keys[pygame.K_z]:
+                    match self.board[self.current_row][self.current_col]:
+                        case Patterns.blank:
+                            self.board[self.current_row][self.current_col] = Patterns.horizontal
+                        case Patterns.horizontal:
+                            self.board[self.current_row][self.current_col] = Patterns.vertical
+                        case Patterns.vertical:
+                            self.board[self.current_row][self.current_col] = Patterns.fill
+                        case Patterns.fill:
+                            self.board[self.current_row][self.current_col] = Patterns.blank
+
 
             WIN.fill(BG)
             
             if state == "menu":
                 self.draw_menu()
             elif state == "game":
-                self.board[self.current_row + 1][self.current_col] = Patterns.uparrow
+                if self.current_row < 6: 
+                    self.board[self.current_row + 1][self.current_col] = Patterns.uparrow
                 self.draw_game()
             elif state == "controls":
                 self.draw_controls()
 
             pygame.display.flip()
-            clock.tick(12)
+            clock.tick(8)
 
     def draw_menu(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
