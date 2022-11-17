@@ -162,14 +162,41 @@ class Mastermind:
 
         self.pattern = []
         for i in range(4):
-            self.pattern.append(Patterns(random.randint(0, 3)))
+            index = random.randint(0, 3)
+            match index:
+                case 0:
+                    self.pattern.append(Patterns.blank)
+                case 1:
+                    self.pattern.append(Patterns.vertical)
+                case 2:
+                    self.pattern.append(Patterns.horizontal)
+                case 3:
+                    self.pattern.append(Patterns.fill)
 
         self.current_row = 0
         self.current_col = 0
 
         self.option = 0
 
+        self.scores = []
+
         self.main()
+
+    def check_row(self, row):
+        fills = []
+        blanks = []
+        dots = []
+        for i, box in enumerate(self.board[row]):
+            if self.pattern[i] == self.board[row][i]:
+                fills.append("fill")
+            elif self.pattern[i] in self.board[row]:
+                blanks.append("blank")
+            else:
+                dots.append("dot")
+        
+        score = [] + fills + blanks + dots
+        self.scores.append(score)
+        
 
     def main(self):
         state = "menu"
@@ -219,6 +246,20 @@ class Mastermind:
                         self.current_col = 0
                         self.current_row = 0
 
+                        self.pattern = []
+                        for i in range(4):
+                            index = random.randint(0, 3)
+                            match index:
+                                case 0:
+                                    self.pattern.append(Patterns.blank)
+                                case 1:
+                                    self.pattern.append(Patterns.vertical)
+                                case 2:
+                                    self.pattern.append(Patterns.horizontal)
+                                case 3:
+                                    self.pattern.append(Patterns.fill)
+
+                        self.scores = []
 
                     state = "menu"
             
@@ -230,6 +271,8 @@ class Mastermind:
                     if self.current_col < 3:
                         self.current_col += 1
                 if keys[pygame.K_RETURN]:
+                    if self.current_row <= 5:
+                        self.check_row(self.current_row)
                     if self.current_row < 5:
                         self.current_row += 1
                         self.current_col = 0
@@ -302,11 +345,6 @@ class Mastermind:
 
     def draw_game(self):
         self.draw_board()
-        br.little_fill(80, 0, SIZE, SIZE, 10)
-        br.little_border(100, 0, SIZE, SIZE, 10)
-        br.little_border(120, 0, SIZE, SIZE, 10)
-        br.little_dot(140, 0, SIZE, SIZE)
-
 
     def draw_board(self):
         """
@@ -328,6 +366,19 @@ class Mastermind:
                         br.vertical(x, y, SIZE, SIZE)
                     case Patterns.uparrow:
                         br.arrow(x, y, FG)
+
+        if self.scores != []:
+            for i, row in enumerate(self.scores):
+                y = i * 20
+                for j, column in enumerate(row):
+                    x = (j * 20) + 80
+                    match column:
+                        case "fill":
+                            br.little_fill(x, y, SIZE, SIZE, 10)
+                        case "blank":
+                            br.little_border(x, y, SIZE, SIZE, 10)
+                        case "dot":
+                            br.little_dot(x, y, SIZE, SIZE)
 
     def draw_controls(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
