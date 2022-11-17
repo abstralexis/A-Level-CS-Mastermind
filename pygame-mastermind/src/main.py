@@ -46,6 +46,7 @@ class Patterns(Enum):
     vertical = 1
     horizontal = 2
     fill = 3
+    uparrow = 4
 
 class BoxRenderer:
     def __init__(self, screen: pygame.Surface):
@@ -115,6 +116,15 @@ class BoxRenderer:
     def _single_dot(self, x, y, col):
         pygame.draw.line(self.screen, col, (x, y), (x, y))
 
+    def arrow(self, x, y, col):
+        point1 = (x + 10, y + 2)
+        point2 = (x + 5, y + 7)
+        point3 = (x + 15, y + 7)
+
+        pygame.draw.line(self.screen, col, point1, point2)
+        pygame.draw.line(self.screen, col, point2, point3)
+        pygame.draw.line(self.screen, col, point3, point1)
+
     def background(self, x, y, w, h, col1, col2):
         """
         Was going to be a gradient but ended up being something
@@ -146,8 +156,11 @@ class Mastermind:
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None],
-            [None, None, None, None]
+            [None, None, None, Patterns.horizontal]
         ]
+
+        self.current_row = 0
+        self.current_col = 0
 
         self.option = 0
 
@@ -163,6 +176,8 @@ class Mastermind:
                     running = False
                     pygame.quit()
                     sys.exit()
+
+            self.board[self.current_row + 1][self.current_col] = None
 
             keys = pygame.key.get_pressed()
                 # Scroll the menu
@@ -182,15 +197,27 @@ class Mastermind:
                         running = False
                         pygame.quit()
                         sys.exit()
-            elif state != "menu":
+            
+            if state != "menu":
                 if keys[pygame.K_ESCAPE]:
                     state = "menu"
+            
+            if state == "game":
+                if keys[pygame.K_LEFT]:
+                    if self.current_col > 0:
+                        self.current_col -= 1
+                        print(self.current_col)
+                if keys[pygame.K_RIGHT]:
+                    if self.current_col < 3:
+                        print(self.current_col)
+                        self.current_col += 1
 
             WIN.fill(BG)
             
             if state == "menu":
                 self.draw_menu()
             elif state == "game":
+                self.board[self.current_row + 1][self.current_col] = Patterns.uparrow
                 self.draw_game()
             elif state == "controls":
                 self.draw_controls()
@@ -256,6 +283,8 @@ class Mastermind:
                         br.horizontal(x, y, SIZE, SIZE)
                     case Patterns.vertical:
                         br.vertical(x, y, SIZE, SIZE)
+                    case Patterns.uparrow:
+                        br.arrow(x, y, FG)
 
     def draw_controls(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
