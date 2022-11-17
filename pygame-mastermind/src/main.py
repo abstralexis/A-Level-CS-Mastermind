@@ -178,7 +178,6 @@ class Mastermind:
                     self.pattern.append(Patterns.horizontal)
                 case 3:
                     self.pattern.append(Patterns.fill)
-        print(self.pattern)
 
         self.current_row = 0
         self.current_col = 0
@@ -234,14 +233,14 @@ class Mastermind:
                     if self.option > 0:
                         self.option -= 1
                 if keys[pygame.K_DOWN]:
-                    if self.option < 3:
+                    if self.option < 2:
                         self.option += 1
                 if keys[pygame.K_z]:
                     if self.option == 0:
                         state = "game"
-                    elif self.option == 2:
+                    elif self.option == 1:
                         state = "controls"
-                    elif self.option == 3:
+                    elif self.option == 2:
                         running = False
                         pygame.quit()
                         sys.exit()
@@ -336,7 +335,6 @@ class Mastermind:
 
         titletxt = "MASTERMIND"
         playtxt = "Play"
-        ldrbrdtxt = "Leaderboard"
         ctrltxt = "Controls"
         exittxt = "Exit"
 
@@ -344,24 +342,20 @@ class Mastermind:
             case 0:
                 playtxt = "> " + playtxt
             case 1:
-                ldrbrdtxt = "> " + ldrbrdtxt
-            case 2:
                 ctrltxt = "> " + ctrltxt
-            case 3:
+            case 2:
                 exittxt = "> " + exittxt    
 
         title = TITLE.render(titletxt, False, FG, BG)
         play = OPTION.render(playtxt, False, FG, BG)
-        leaderboard = OPTION.render(ldrbrdtxt, False, FG, BG)
         controls = OPTION.render(ctrltxt, False, FG, BG)
         exit = OPTION.render(exittxt, False, FG, BG)
 
         WIN.blit(title, (0, 0))
-        br.blank(30, 30, 97, 100)
-        WIN.blit(play, (40, 40))
-        WIN.blit(leaderboard, (40, 60))
-        WIN.blit(controls, (40, 80))
-        WIN.blit(exit, (40, 100))
+        br.blank(30, 45, 97, 70)
+        WIN.blit(play, (40, 50))
+        WIN.blit(controls, (40, 70))
+        WIN.blit(exit, (40, 90))
 
     def draw_game(self):
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
