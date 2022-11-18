@@ -196,11 +196,21 @@ class Mastermind:
         fills = []
         blanks = []
         dots = []
+
+        num_patterns = {
+            Patterns.blank: self.pattern.count(Patterns.blank),
+            Patterns.fill: self.pattern.count(Patterns.fill),
+            Patterns.horizontal: self.pattern.count(Patterns.horizontal),
+            Patterns.vertical: self.pattern.count(Patterns.vertical)
+        }
+
         for i, box in enumerate(self.board[row]):
-            if self.pattern[i] == self.board[row][i]:
+            if self.pattern[i] == self.board[row][i] and num_patterns[self.pattern[i]] > 0:
                 fills.append("fill")
-            elif self.pattern[i] in self.board[row]:
+                num_patterns[self.pattern[i]] -= 1
+            elif self.board[row][i] in self.pattern and num_patterns[self.pattern[i]] > 0:
                 blanks.append("blank")
+                num_patterns[self.pattern[i]] -= 1
             else:
                 dots.append("dot")
         
