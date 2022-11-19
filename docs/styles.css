@@ -1,0 +1,15 @@
+html {
+    background-color: black;
+    font-family: monospace;
+    color: mediumseagreen;
+}
+
+.image {
+    outline-style: solid;
+    outline-offset: 5px;
+    outline-color: mediumseagreen;
+}
+
+h1 {
+    font-size: xxx-large;
+}
