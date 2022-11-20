@@ -13,3 +13,17 @@ html {
 h1 {
     font-size: xxx-large;
 }
+
+p {
+    border: 1px solid;
+}
+
+#whatis {
+    width: 75%;
+}
+
+/*
+#whatis:hover {
+    scale: 110%
+}
+*/
