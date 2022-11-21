@@ -4,10 +4,14 @@ html {
     color: mediumseagreen;
 }
 
-.image {
+#screenshot {
+    scale: 200px;
     outline-style: solid;
     outline-offset: 5px;
     outline-color: mediumseagreen;
+    height: 200px; 
+    width: auto; 
+    margin: 10px;   
 }
 
 h1 {
