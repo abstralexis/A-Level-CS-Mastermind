@@ -14,8 +14,39 @@ html {
     margin: 10px;   
 }
 
+#screenshot:hover {
+    scale: 105%;
+}
+
+#lingradient {
+    /*
+    Linear Gradient with no grey zone
+    thanks to https://www.learnui.design/tools/gradient-generator.html
+    */
+    background: linear-gradient(
+        180deg,
+        #000000, 
+        #121d15, 
+        #1a3223, 
+        #224a31, 
+        #296340, 
+        #307c50, 
+        #369760, 
+        #3cb371
+    );
+}
+
 h1 {
+    font-family: serif;
+    font-style: normal;
+    font-weight: normal;
     font-size: xxx-large;
+}
+
+h2 {
+    font-family: serif;
+    font-style: normal;
+    font-weight: normal;
 }
 
 p {

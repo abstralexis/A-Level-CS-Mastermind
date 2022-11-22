@@ -29,22 +29,31 @@
             </p>
         </div>
         
-        <div align="center">
+        <div align="center" id="lingradient">
             <h2>
                 Main Menu and Title Screen
             </h2>
             <image src="assets/title_screen.png" id="screenshot"></image>
             <image src="assets/menu_navigation.png" id="screenshot"></image>
             <image src="assets/controls_menu.png" id="screenshot"></image>
+        </div>
+        <div align="center">
             <p id="whatis">
                 This is the Main Menu and Title Screen. It is navigated by the arrow keys, 
-                with option select bound to <b>Z</b> and going back a menu bound to <b>Esc</b>.
+                with option select bound to <i>Z</i> and going back a menu bound to <i>Esc</i>.
                 The menu is designed to be intuitive and user-friendly. It only shows
                 a few options at once for the user, and the indication of the selection is 
                 small but clear - deliberately unobtrusive. It contains an option to play the 
                 game, an option to see the controls, and an option to exit the game using controls
                 inside the game rather than pressing the <i>'x'</i>. The whole application is usable with
-                just the keyboard, which works well for this retro-style look.
+                just the keyboard, which works well for this retro-style look. The background
+                for the game and its menus was supposed to be a linear mediumseagreen to black
+                vertical gradient (like above), however this required me to make my own implementation in 
+                Pygame to draw one that uses only two colours and a dithering effect.
+                The density of the green per line would decrease with a certain pattern going up.
+                However, I likely got the maths or implementation wrong and ended up with this 
+                really interesting pattern that resembles a reciprocal function more than it
+                does a linear gradient.
             </p>
         </div>
     </body>
