@@ -56,5 +56,38 @@
                 does a linear gradient.
             </p>
         </div>
+
+        <div align="center">
+            <h2>
+                Gameplay and Visual Design Choices
+            </h2>
+            <image src="assets/gameplay_1.png" id="screenshot"></image>
+            <image src="assets/gameplay_2.png" id="screenshot"></image>
+            <image src="assets/gameplay_3.png" id="screenshot"></image>
+        </div>
+        <div align="center" id="lingradient">
+            <image src="assets/gameplay_4.png" id="screenshot"></image>
+            <image src="assets/gameplay_5.png" id="screenshot"></image>
+        </div>
+        <div align="center">
+            <p id="whatis">
+                The gameplay for this game is simple. The player places uses the arrow keys to 
+                select one of 4 tiles in the row, then uses <i>Z</i> to change the pattern in that
+                tile. Once the user is satisfied with that row, they press <i>Enter/Return</i> 
+                to submit the row. The row is then compared to a row that was randomly generated at
+                the start of the game, and then is scored accordingly. The full square means that the 
+                user has a tile in the right place and right pattern, and the blank square means that
+                there is a tile in the wrong place. The scoring can sometimes be quite ambiguous, so it
+                is up to the user to solve it. 
+            </p>
+            <p id="whatis">
+                Technically, when the row is submitted, a variable that acts like a pointer to the current
+                row changes to the next row so then the row in the board that gets changed by the press
+                of <i>Z</i> is correct. This means that the previous rows are stored as they were so 
+                that they can be drawn to the screen correctly. The scores are also tracked in an array
+                like the board, so that the scores do not have to be calculated every frame which could 
+                cause unnecessary computation and lower performance.
+            </p>
+        </div>
     </body>
 </html>
