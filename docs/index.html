@@ -126,5 +126,34 @@
                 and code files would be appropriate for Python for cases like these, however this is unlikely.
             </p>
         </div>
+        <div align="center">
+            <h3>
+                The Box Renderer 
+            </h3>
+            <image src="assets/code_box_renderer_example.png" id="code"></image>
+            <image src="assets/code_brexample2_background.png" id="code"></image>
+        </div>
+        <div align="center" id="lingradient">
+            <image src="assets/code_patterns_enum.png" id="screenshot"></image>
+        </div>
+        <div align="center">
+            <p id="whatis">
+                This is the Box Renderer class as well as the Patterns enum for the whole
+                program. This enum just holds abstract variables that just help with the other utilities
+                in the program for drawing and game logic etc. The class, <i>BoxRenderer</i> is initialised
+                only with the screen to draw on, and then the functions within that object draw to said
+                screen using parameters such as the width, height, and x and y position. It made sense to make
+                this a class because it reuses the screen variable in the drawing a lot, as well as being
+                more abstracted for the programmer. It makes the main game loop and logic easier to read this way.
+            </p>
+            <p id="whatis">
+                The aforementioned background that didn't work as intended that then became a feature is also shown
+                above. I forgot the exact maths that I used to try to figure out how to implement the strictly two
+                colour linear dithered gradient, but it did not work when implemented and after much tweaking to get
+                it to try and work, I got the current background. I like this background more than I would have 
+                if it went exactly as I wanted, so I am quite happy with it. I want to then reverse engineer this 
+                background function now to some mathematical form so I can compare the two.
+            </p>
+        </div>
     </body>
 </html>
