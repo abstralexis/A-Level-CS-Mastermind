@@ -18,6 +18,21 @@ html {
     scale: 105%;
 }
 
+#code {
+    scale: 200px;
+    outline-style: solid;
+    outline-offset: 5px;
+    outline-color: mediumseagreen;
+    height: 500px; 
+    width: auto; 
+    margin: 10px;   
+}
+
+#code:hover {
+    scale: 105%;
+}
+
+
 #lingradient {
     /*
     Linear Gradient with no grey zone
@@ -34,6 +49,8 @@ html {
         #369760, 
         #3cb371
     );
+
+    padding: 7px;
 }
 
 h1 {
@@ -44,6 +61,12 @@ h1 {
 }
 
 h2 {
+    font-family: serif;
+    font-style: normal;
+    font-weight: normal;
+}
+
+h3 {
     font-family: serif;
     font-style: normal;
     font-weight: normal;
@@ -62,3 +85,51 @@ p {
     scale: 110%
 }
 */
+
+.github-logo {
+    height: 100px;
+    clip-path: circle();
+    overflow: hidden;   
+    display: inline-block;
+    border: 3px solid rgb(200, 100, 200);
+    border-spacing: 5px;
+    border-radius: 50%;
+    margin-left: 10px;
+    padding-bottom: 1px;
+    text-align: justify;
+}
+
+.github-logo:hover {
+    scale: 105%;
+}
+
+
+#trans {
+	background: linear-gradient(
+		to bottom,
+		#5ccefa,
+		#5ccefa 20%,
+		#f6a8b7 20%,
+		#f6a8b7 40%,
+		#fff 40%,
+		#fff 60%,
+		#f6a8b7 60%,
+		#f6a8b7 80%,
+		#5ccefa 80%,
+		#5ccefa
+		);
+}
+
+.pfp{
+    margin-top: 5px;
+    clip-path: circle();
+    width: 100px;
+    height: 100px;
+    border-spacing: 5px;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.pfp:hover {
+    transform: scale(1.05)
+}

@@ -80,13 +80,50 @@
                 there is a tile in the wrong place. The scoring can sometimes be quite ambiguous, so it
                 is up to the user to solve it. 
             </p>
+        </div>
+
+        <div align="center">
+            <h2>
+                Code and Technical aspects
+            </h2>
+
+            <span>
+                <a href="https://github.com/AlexisComix" title="Visit me on GitHub!" target="_blank">
+                    <img class="pfp"
+                        id="trans" 
+                        src="https://avatars.githubusercontent.com/u/107479436?v=4" 
+                        alt="My Profile Picture"/>
+                </a>
+                <a href="https://github.com/AlexisComix/A-Level-CS-Mastermind" title="Visit the repository!" target="_blank">
+                    <img class="github-logo"
+                        src="https://pnggrid.com/wp-content/uploads/2022/03/Github-Logo-White.png"
+                        alt="Visit the repository!"/>
+                </a>
+            </span>
+        </div>
+        <div align="center" id="lingradient">
+            <h3>
+                The Mastermind Game Class
+            </h3>
+            <image src="assets/code_mastermind_init.png" id="code"></image>
+            <image src="assets/code_mastermind_main_loop+some_controls.png" id="code"></image>
+        </div>
+        <div align="center">
             <p id="whatis">
-                Technically, when the row is submitted, a variable that acts like a pointer to the current
-                row changes to the next row so then the row in the board that gets changed by the press
-                of <i>Z</i> is correct. This means that the previous rows are stored as they were so 
-                that they can be drawn to the screen correctly. The scores are also tracked in an array
-                like the board, so that the scores do not have to be calculated every frame which could 
-                cause unnecessary computation and lower performance.
+                This is the start for the code for the main game class, Mastermind. This class holds the 
+                gameplay logic and the linking together of the drawing functions defined in the class BoxRenderer,
+                which I will go into more detail on later. In this class, we start by initialising things necessary
+                for the game to start, and then call the main function. This main function handles the inputs
+                of the user and does the correct actions based on what the user has done and when. Because this uses
+                many different menus, I have used a state system that changes based on what menu has been selected.
+                Depending on the state of the game, it will either handle only menu, game, or controls screen inputs and
+                drawing functions. The main game class is far too long for my liking, and it does too many things at once.
+                It would have been preferred to split it into different subroutines and functions for the sake of 
+                abstraction. Functional programming would have been better for this I think as the game is very
+                simple and does not need super complex classes and objects. The only thing it is useful for in this 
+                implementation is abstraction and not having to pass variables around constantly to drawing functions.
+                That would cause messy coupling issues if not done well. I think a system more like C/C++'s header files
+                and code files would be appropriate for Python for cases like these, however this is unlikely.
             </p>
         </div>
     </body>
