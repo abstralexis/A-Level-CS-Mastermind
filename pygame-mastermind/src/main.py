@@ -9,8 +9,8 @@ from enum import Enum
 import pygame                                   # 3rd Party imports
 import color_codes as cc
 
-# --- Globals --
-pygame.init()
+# --- Globals --        
+pygame.init()                                   # Initialise Pygame
 
 WIDTH = 160                                     # Gameboy dimensions
 HEIGHT = 144
@@ -19,7 +19,7 @@ pygame.display.set_caption("Mastermind")        # Set caption
 
 # Icon loader
 icon_path = "..\\assets\\icon.png"
-if os.path.exists(icon_path):
+if os.path.exists(icon_path):                   # Safely check if icon is in cwd
     icon = pygame.image.load(icon_path, "img")
     pygame.display.set_icon(icon)
 else:
@@ -40,7 +40,7 @@ TEXT = pygame.font.SysFont("serif", 8)
 
 # --- Other classes --
 
-# Block patterns
+# Block patterns enum
 class Patterns(Enum):
     blank = 0
     vertical = 1
@@ -49,32 +49,62 @@ class Patterns(Enum):
     uparrow = 4
 
 class BoxRenderer:
+    """
+    This is the main graphical rendering part of the game.
+    It is called BoxRenderer because it was initially just for
+    the boxes in the main gameplay section.
+    """
     def __init__(self, screen: pygame.Surface):
+        """
+        Take in the screen as an argument when initialising an object 
+        of BR.        
+        """
         self.screen = screen
 
     def fgborder(self, x, y, w, h):
+        """
+        Draws a box border at (x, y) of widthxheight wxh
+        with the foreground colour that has no fill
+        """
         pygame.draw.line(self.screen, FG, (x, y), (x + w, y))
         pygame.draw.line(self.screen, FG, (x + w, y), (x + w, y + h))
         pygame.draw.line(self.screen, FG, (x + w, y + h), (x, y + h))
         pygame.draw.line(self.screen, FG, (x, y + h), (x, y))
 
     def bgborder(self, x, y, w, h):
+        """
+        Draws a box at (x, y) of widthxheight wxh
+        with the background colour that has no fill
+        """
         pygame.draw.line(self.screen, BG, (x, y), (x + w, y))
         pygame.draw.line(self.screen, BG, (x + w, y), (x + w, y + h))
         pygame.draw.line(self.screen, BG, (x + w, y + h), (x, y + h))
         pygame.draw.line(self.screen, BG, (x, y + h), (x, y))
 
     def blank(self, x, y, w, h):
+        """
+        Draws a box at (x, y) of widthxheight wxh
+        with the foreground colour that has no fill
+        """
         rect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, BG, rect)
         self.fgborder(x, y, w, h)
 
     def fill(self, x, y, w, h):
+        """
+        Draws a box at (x, y) of widthxheight wxh
+        with the foreground colour that has fill of
+        foreground colour
+        """
         self.fgborder(x, y, w, h)
         rect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, FG, rect)
 
     def vertical(self, x, y, w, h):
+        """
+        Draws a box at (x, y) with widthxheight wxh with
+        a border and vertical lines in the foreground colour.
+        """
         rect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, BG, rect)
         self.fgborder(x, y, w, h)
@@ -87,6 +117,10 @@ class BoxRenderer:
             )
 
     def horizontal(self, x, y, w, h):
+        """
+        Draws a box at (x, y) with widthxheight wxh with
+        a border and horizontal lines in the foreground colour.
+        """
         rect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, BG, rect)
         self.fgborder(x, y, w, h)
@@ -99,6 +133,10 @@ class BoxRenderer:
             )
 
     def little_border(self, x, y, w, h, size):
+        """
+        Draws a small border in the centre of a box at
+        (x,y) wxh with size of size.
+        """
         tlx = x + ((w - size) // 2)      # Top left offsets
         tly = y + ((h - size) // 2)
         rect = pygame.rect.Rect(tlx, tly, size, size)
@@ -109,6 +147,10 @@ class BoxRenderer:
         pygame.draw.line(self.screen, FG, (tlx, tly + size), (tlx, tly))
 
     def little_fill(self, x, y, w, h, size):
+        """
+        Draws a small border and fill in the centre of a box at
+        (x,y) wxh with size of size.
+        """
         self.little_border(x, y, w, h, size)
 
         tlx = x + ((w - size) // 2)      # Top left offsets
@@ -117,12 +159,22 @@ class BoxRenderer:
         pygame.draw.rect(self.screen, FG, rect)
 
     def little_dot(self, x, y, w, h):
+        """
+        Draws a small dot in the centre of a box at
+        (x,y) wxh with size of 3.
+        """
         self.little_fill(x, y, w, h, 3)
 
     def _single_dot(self, x, y, col):
+        """
+        Draws a single dot at certain coordinates.
+        """
         pygame.draw.line(self.screen, col, (x, y), (x, y))
 
     def arrow(self, x, y, col):
+        """
+        Draw an arrow at the top of a box.
+        """
         point1 = (x + 10, y + 2)
         point2 = (x + 5, y + 7)
         point3 = (x + 15, y + 7)
@@ -135,6 +187,8 @@ class BoxRenderer:
         """
         Was going to be a gradient but ended up being something
         quite cool. Not sure how that happened.
+
+        Is a cool background.
         """
         bgrect = pygame.rect.Rect(x, y, w, h)
         pygame.draw.rect(self.screen, col1, bgrect)
@@ -151,11 +205,18 @@ class BoxRenderer:
                 )
 
 
+# Initialise BoxRenderer instance
 br = BoxRenderer(WIN)
 
 # --- Main game class ---
 class Mastermind:
+    """
+    This is the main Mastermind game class.
+    """
     def __init__(self):
+        """
+        Load the initial game variables and call main
+        """
         self.board = [
             [Patterns.blank, Patterns.blank, Patterns.blank, Patterns.blank],
             [None, None, None, None],
@@ -193,6 +254,9 @@ class Mastermind:
         self.main()
 
     def check_row(self, row):
+        """
+        Checks the row and adds the scores to a scores list to draw
+        """
         fills = []
         blanks = []
         dots = []
@@ -223,10 +287,16 @@ class Mastermind:
         
 
     def main(self):
-        state = "menu"
+        """
+        Main function
+        """
+        state = "menu"                          # State machine 
         running = True
         clock = pygame.time.Clock()
+
+        # Main loop
         while running:
+            # --- Poll events ---
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -237,7 +307,7 @@ class Mastermind:
                 self.board[self.current_row + 1][self.current_col] = None
 
             keys = pygame.key.get_pressed()
-                # Scroll the menu
+            # Scroll the menu
             if state == "menu":
                 if keys[pygame.K_UP]:
                     if self.option > 0:
@@ -291,6 +361,7 @@ class Mastermind:
 
                     state = "menu"
             
+            # Main game controls
             if state == "game":
                 if keys[pygame.K_LEFT]:
                     if self.current_col > 0:
@@ -325,7 +396,7 @@ class Mastermind:
                         case Patterns.fill:
                             self.board[self.current_row][self.current_col] = Patterns.blank
 
-
+            # Drawing
             WIN.fill(BG)
             
             if state == "menu":
@@ -341,6 +412,9 @@ class Mastermind:
             clock.tick(8)
 
     def draw_menu(self):
+        """
+        Drawing the menu function
+        """
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
 
         titletxt = "MASTERMIND"
@@ -430,6 +504,9 @@ class Mastermind:
 
 
     def draw_controls(self):
+        """
+        Draw the stuff shown on the controls screen.
+        """
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
         br.blank(5, (HEIGHT//3), WIDTH - 10, HEIGHT - 30 - (HEIGHT//3))
         titletxt = "CONTROLS"
