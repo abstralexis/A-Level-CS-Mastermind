@@ -20,9 +20,9 @@ pygame.display.set_caption("Mastermind")        # Set caption
 # Icon loader
 icon_path = "..\\assets\\icon.png"
 if os.path.exists(icon_path):                   # Safely check if icon is in cwd
-    icon = pygame.image.load(icon_path, "img")
-    pygame.display.set_icon(icon)
-else:
+    icon = pygame.image.load(icon_path, "img")  # Load image
+    pygame.display.set_icon(icon)               # Set as icon       
+else:                                           # Warn on file not found
     print("Icon Load failed. Check you are in the right working directory.")
 
 # Colours
@@ -33,8 +33,8 @@ FG = cc.EARTH_GREEN.rgb
 SIZE = 20   # The size in px of each block
 
 # Fonts
-pygame.font.init()
-TITLE = pygame.font.SysFont("serif", 24)
+pygame.font.init()                          # Initialise fonts module
+TITLE = pygame.font.SysFont("serif", 24)    # Load different font sizes
 OPTION = pygame.font.SysFont("serif", 16)
 TEXT = pygame.font.SysFont("serif", 8)
 
@@ -42,6 +42,10 @@ TEXT = pygame.font.SysFont("serif", 8)
 
 # Block patterns enum
 class Patterns(Enum):
+    """
+    Holds the patterns for rendering blocks to the screen from
+    the board, includes box patterns and the up arrow.
+    """
     blank = 0
     vertical = 1
     horizontal = 2
@@ -227,10 +231,10 @@ class Mastermind:
             [None, None, None, None]    # Buffer row for arrow
         ]
 
-        self.pattern = []
-        for i in range(4):
-            index = random.randint(0, 3)
-            match index:
+        self.pattern = []                   # Clear pattern array
+        for i in range(4):                  # For a width of 4,
+            index = random.randint(0, 3)    # Get random pattern index
+            match index:                    # Match index and add to pattern
                 case 0:
                     self.pattern.append(Patterns.blank)
                 case 1:
@@ -240,6 +244,7 @@ class Mastermind:
                 case 3:
                     self.pattern.append(Patterns.fill)
 
+        # Other var inits
         self.current_row = 0
         self.current_col = 0
 
@@ -251,16 +256,20 @@ class Mastermind:
 
         self.won = False
 
+        # Call main
         self.main()
 
     def check_row(self, row):
         """
         Checks the row and adds the scores to a scores list to draw
         """
+        # Counting arrays for the types of scoring pegs
+        # So that they can be ordered after
         fills = []
         blanks = []
         dots = []
 
+        # Counts the number of each pattern in the target pattern
         num_patterns = {
             Patterns.blank: self.pattern.count(Patterns.blank),
             Patterns.fill: self.pattern.count(Patterns.fill),
@@ -268,6 +277,9 @@ class Mastermind:
             Patterns.vertical: self.pattern.count(Patterns.vertical)
         }
 
+        # Iterate through the row and if the patterns covered count for something is
+        # More than 0, append the score then decrease the count. The count helps to
+        # Keep the scoring more in line with a more human way of thinking.
         for i, box in enumerate(self.board[row]):
             if self.pattern[i] == self.board[row][i] and num_patterns[self.pattern[i]] > 0:
                 fills.append("fill")
@@ -278,10 +290,12 @@ class Mastermind:
             else:
                 dots.append("dot")
         
+        # Checks the win
         if fills == ["fill", "fill", "fill", "fill"]:
-            self.game_ended = True
-            self.won = True
+            self.game_ended = True  # The game has ended
+            self.won = True         # AND the user has won
 
+        # Set score and append it to scores array to draw
         score = [] + fills + blanks + dots
         self.scores.append(score)
         
@@ -292,23 +306,23 @@ class Mastermind:
         """
         state = "menu"                          # State machine 
         running = True
-        clock = pygame.time.Clock()
+        clock = pygame.time.Clock()             # Clock for fps
 
         # Main loop
         while running:
             # --- Poll events ---
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+            for event in pygame.event.get():    # Get all events
+                if event.type == pygame.QUIT:   # If the big 'X' pressed
+                    running = False             # Quit
                     pygame.quit()
                     sys.exit()
 
-            if self.current_row < 6:
+            if self.current_row < 6:            # Clear where the arrow is before redraw
                 self.board[self.current_row + 1][self.current_col] = None
 
-            keys = pygame.key.get_pressed()
+            keys = pygame.key.get_pressed()     # Get all pressed keys
             # Scroll the menu
-            if state == "menu":
+            if state == "menu":                 # Menu controls for navigation
                 if keys[pygame.K_UP]:
                     if self.option > 0:
                         self.option -= 1
@@ -317,7 +331,7 @@ class Mastermind:
                         self.option += 1
                 if keys[pygame.K_z]:
                     if self.option == 0:
-                        state = "game"
+                        state = "game"          # Example of changing state on select
                     elif self.option == 1:
                         state = "controls"
                     elif self.option == 2:
@@ -325,7 +339,7 @@ class Mastermind:
                         pygame.quit()
                         sys.exit()
             
-            if state != "menu":
+            if state != "menu":             # Allow escape to be used on any non menu
                 if keys[pygame.K_ESCAPE]:
                     if state == "game":     # Reset vars on esc
                         self.board = [
@@ -363,29 +377,29 @@ class Mastermind:
             
             # Main game controls
             if state == "game":
-                if keys[pygame.K_LEFT]:
+                if keys[pygame.K_LEFT]:         # Go left a col
                     if self.current_col > 0:
                         self.current_col -= 1
-                if keys[pygame.K_RIGHT]:
+                if keys[pygame.K_RIGHT]:        # Go right a col
                     if self.current_col < 3:
                         self.current_col += 1
-                if keys[pygame.K_RETURN]:
-                    if self.current_row <= 5:
+                if keys[pygame.K_RETURN]:       # Enter row
+                    if self.current_row <= 5:   # Check win
                         self.check_row(self.current_row)
-                    if self.current_row < 5:
-                        self.current_row += 1
-                        self.current_col = 0
+                    if self.current_row < 5:    # If not the last row                
+                        self.current_row += 1   # Change row and col ptrs
+                        self.current_col = 0    # and add clear row
                         self.board[self.current_row] = [
                             Patterns.blank, 
                             Patterns.blank, 
                             Patterns.blank, 
                             Patterns.blank
                         ]
-                    elif self.current_row == 5:
-                        self.current_row += 1
+                    elif self.current_row == 5: # If last row (final guess)
+                        self.current_row += 1   # Add a clear line below 
                         self.board[self.current_row] = [None, None, None, None]
-                        self.game_ended = True
-                if keys[pygame.K_z]:
+                        self.game_ended = True  # End game
+                if keys[pygame.K_z]:    # Change the pattern stored at current selection
                     match self.board[self.current_row][self.current_col]:
                         case Patterns.blank:
                             self.board[self.current_row][self.current_col] = Patterns.horizontal
@@ -396,32 +410,34 @@ class Mastermind:
                         case Patterns.fill:
                             self.board[self.current_row][self.current_col] = Patterns.blank
 
-            # Drawing
-            WIN.fill(BG)
+            # --- Drawing ---
+            WIN.fill(BG)    # Fill with bg col
             
             if state == "menu":
-                self.draw_menu()
+                self.draw_menu()    # Draw the menu
             elif state == "game":
-                if self.current_row < 6: 
+                if self.current_row < 6:    # Add the arrow to the board
                     self.board[self.current_row + 1][self.current_col] = Patterns.uparrow
-                self.draw_game()
-            elif state == "controls":
-                self.draw_controls()
+                self.draw_game()            # Draw the game
+            elif state == "controls":       
+                self.draw_controls()        # Draw the controls screen
 
-            pygame.display.flip()
-            clock.tick(8)
+            pygame.display.flip()           # Update screen
+            clock.tick(8)                   # 8 fps
 
     def draw_menu(self):
         """
         Drawing the menu function
         """
-        br.background(0, 0, WIDTH, HEIGHT, FG, BG)
+        br.background(0, 0, WIDTH, HEIGHT, FG, BG)  # Draw background
 
+        # Text variables
         titletxt = "MASTERMIND"
         playtxt = "Play"
         ctrltxt = "Controls"
         exittxt = "Exit"
 
+        # Depending on what is selected, indicate with a '>' prepended.
         match self.option:
             case 0:
                 playtxt = "> " + playtxt
@@ -430,11 +446,13 @@ class Mastermind:
             case 2:
                 exittxt = "> " + exittxt    
 
+        # Render the texts
         title = TITLE.render(titletxt, False, FG, BG)
         play = OPTION.render(playtxt, False, FG, BG)
         controls = OPTION.render(ctrltxt, False, FG, BG)
         exit = OPTION.render(exittxt, False, FG, BG)
 
+        # Blit the texts to the screen as well as a box around it
         WIN.blit(title, (0, 0))
         br.blank(30, 45, 97, 70)
         WIN.blit(play, (40, 50))
@@ -442,19 +460,22 @@ class Mastermind:
         WIN.blit(exit, (40, 90))
 
     def draw_game(self):
-        br.background(0, 0, WIDTH, HEIGHT, FG, BG)
-        self.draw_board()
+        """
+        Function for drawing during the game
+        """
+        br.background(0, 0, WIDTH, HEIGHT, FG, BG)  # Draw the background
+        self.draw_board()                           # Draw the board
 
     def draw_board(self):
         """
         Draws the board to the screen by calling the BoxRenderer
         based off of what values are stored in the board list.
         """
-        for i, row in enumerate(self.board):
-            y = i * 20
-            for j, column in enumerate(row):
-                x = j * 20
-                match column:
+        for i, row in enumerate(self.board):        # Iter through board rows
+            y = i * 20                              # y coord offset for row
+            for j, column in enumerate(row):        # Iter through cols in row
+                x = j * 20                          # x coord offset for col in row
+                match column:                       # Draw at (x,y) the pattern
                     case Patterns.blank:
                         br.blank(x, y, SIZE, SIZE)
                     case Patterns.fill:
@@ -466,12 +487,12 @@ class Mastermind:
                     case Patterns.uparrow:
                         br.arrow(x, y, FG)
 
-        if self.scores != []:
-            for i, row in enumerate(self.scores):
-                y = i * 20
-                for j, column in enumerate(row):
-                    x = (j * 20) + 80
-                    match column:
+        if self.scores != []:                       # If scores not empty
+            for i, row in enumerate(self.scores):   # Iter through score rows
+                y = i * 20                          # y offset for row
+                for j, column in enumerate(row):    # Iter through score cols in row
+                    x = (j * 20) + 80               # x offset for col in row
+                    match column:                   # Draw at (x,y) the correct score box
                         case "fill":
                             br.little_fill(x, y, SIZE, SIZE, 10)
                         case "blank":
@@ -479,11 +500,11 @@ class Mastermind:
                         case "dot":
                             br.little_dot(x, y, SIZE, SIZE)
 
-        if self.game_ended == True:
-            y = 120
-            for j, column in enumerate(self.pattern):
-                x = j * 20
-                match column:
+        if self.game_ended == True:                     # On game end
+            y = 120                                     # y offset for pattern
+            for j, column in enumerate(self.pattern):   # Iter through pattern
+                x = j * 20                              # x offset for pattern
+                match column:                           # Draw target pattern
                     case Patterns.blank:
                         br.blank(x, y, SIZE, SIZE)
                     case Patterns.fill:
@@ -495,11 +516,11 @@ class Mastermind:
                     case Patterns.uparrow:
                         br.arrow(x, y, FG)
 
-            if self.won:
-                msg = TITLE.render("WIN", False, FG, BG)  
+            if self.won:                                # If the game was won
+                msg = TITLE.render("WIN", False, FG, BG)    # WIN screen
                 WIN.blit(msg, (95, 117)) 
-            else:
-                msg = TITLE.render("LOSE", False, FG, BG)  
+            else:                                       # If the game was not won
+                msg = TITLE.render("LOSE", False, FG, BG)   # LOSE screen
                 WIN.blit(msg, (90, 117)) 
 
 
@@ -507,6 +528,7 @@ class Mastermind:
         """
         Draw the stuff shown on the controls screen.
         """
+        # This is all static rendering really, so it does not need much explanation.
         br.background(0, 0, WIDTH, HEIGHT, FG, BG)
         br.blank(5, (HEIGHT//3), WIDTH - 10, HEIGHT - 30 - (HEIGHT//3))
         titletxt = "CONTROLS"
