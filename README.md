@@ -16,3 +16,7 @@ I tried to start some stuff with Bevy, a rust library for making small graphical
 ## Python w/ Pygame Attempt
 
 I decided to just fall back onto Pygame as my programming option. Doing a bit each day, it did not take long to get a fairly good looking version of Mastermind working. I am really proud of this game. One issue at the moment is the code is somewhat all over the place and uncommented, so I need to clean it up at some point. In addition, because of the way Pygame handles inputs per frame, I had to set the framerate really low. That doesn't matter at all for user experience except for the fact that some inputs are dropped in exchange for inputs that do not repeat if the framerate is too high.
+
+## Documenting what I have done with GitHub Pages
+
+After I got the Pygame version of Mastermind up and running, I decided to start making a page on GitHub pages to format documentation and other things about the process of making this program in a nicer way. I plan to include a QR code to that site on the poster we have to make of our program, but first I need to make it look better and clean up my code more. I am fairly proud of this project as it is the closest thing to a real production game that I have made myself, and it wasn't too complicated. I feel like from here I need to start stretching myself more with lower level theory and languages, and more complex projects that may involve a longer time commitment for learning things like maths of other theory that can apply.
